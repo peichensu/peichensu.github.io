@@ -28,7 +28,7 @@
     "9000": "Government"
   };
 
-  let Supersector_Keys = Object.keys(SectorCodes);
+  let Sector_Keys = Object.keys(SectorCodes);
 
 // These are colors from chart.js utils
     const CHART_COLORS = {
@@ -122,9 +122,6 @@ function responseReceivedHandler(){
       backgroundColor:[],
       hidden:true
     }
-
-
-
   sectorline.label= (SectorCodes[seriesID.substring(3,7)])
   sectorline.borderColor = (CHART_COLORS[chart_colorskeys[count]])
   sectorline.backgroundColor = (CHART_COLORS_50_Percent[chart_colorskeys[count]])
@@ -132,9 +129,9 @@ function responseReceivedHandler(){
   console.log("length=" + dataArray.length)
   for (let i = dataArray.length - 1; i >=0; i--){
     sectorline.data.push(dataArray[i].value)
-  console.log("count=" + count)
+  //console.log("count=" + count)
     if (count ==0){
-    console.log(dataArray[i])
+    //console.log(dataArray[i])
       data.labels.push(dataArray[i].periodName + "/" + dataArray[i].year)
   }
 }
@@ -143,7 +140,7 @@ console.log(data.labels);
 data.datasets.push(sectorline)
 count++
 
-  if ( count == Supersector_Keys.length){
+  if ( count == Sector_Keys.length){
     const myChart = new Chart(
       document.getElementById('myChart'),
       config);
@@ -154,15 +151,16 @@ count++
 }
 
 
-  for (let i=0; i< Supersector_Keys.length; i++){
-    let xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", responseReceivedHandler);
-    xhr.responseType = "json";
-    let startquery= "https://api.bls.gov/publicAPI/v2/timeseries/data/CEU";
-    let endquery = "000001?registrationkey=6a68aea13fb24f1baa9972f5a47f34cc";
-    console.log(startquery+ Supersector_Keys[i] + endquery)
-    xhr.open("GET", startquery+ Supersector_Keys[i] + endquery)
-    xhr.send();
-}
 //    console.dir(myChart);
 //    console.log("Ending");
+//APIkey = 6a68aea13fb24f1baa9972f5a47f34cc
+for (let i=0; i< Sector_Keys.length; i++){
+  let xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", responseReceivedHandler);
+  xhr.responseType = "json";
+  let APIkey = "";
+  let endquery = "000001"; //"000001?registrationkey=" + APIkey
+  console.log("https://api.bls.gov/publicAPI/v2/timeseries/data/CEU"+ Sector_Keys[i] + endquery);
+  xhr.open("GET", "https://api.bls.gov/publicAPI/v2/timeseries/data/CEU"+ Sector_Keys[i] + endquery);
+  xhr.send();
+}
